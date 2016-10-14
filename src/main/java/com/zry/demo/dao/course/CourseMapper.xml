@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zry.demo.dao.course.CourseMapper">
+	<resultMap type="Course" id="courseResultMap">
+		<id property="courseId" column="course_id" />
+		<result property="name" column="name" />
+		<result property="week" column="week" />
+		<result property="startTime" column="start_time" />
+		<result property="endTime" column="end_time" />
+		<result property="teacherId" column="teacher_id" />
+	</resultMap>
+	<resultMap type="Teacher" id="teacherResultMap">
+		<id property="teacherId" column="teacher_id" />
+		<result property="name" column="t_name" />
+		<result property="sex" column="sex" />
+		<result property="age" column="age" />
+	</resultMap>
+	<resultMap type="CourseAndTeacher" id="courseAndTeacherResultMap">
+		<id property="courseId" column="course_id" />
+		<result property="name" column="name" />
+		<result property="week" column="week" />
+		<result property="startTime" column="start_time" />
+		<result property="endTime" column="end_time" />
+		<association property="teacher" resultMap="teacherResultMap"></association>
+	</resultMap>
+	<!-- 将该学生所选的课程显示出来 -->
+	<select id="selectCourseTeacher" parameterType="int"
+		resultMap="courseAndTeacherResultMap">
+		select c.course_id,c.name,c.week,c.start_time,c.end_time,
+		t.teacher_id,t.name "t_name",t.sex,t.age from course c left join
+		teacher t on
+		(c.teacher_id=t.teacher_id)
+		where course_id in (select
+		course_id from
+		course_student where student_id = #{studentId})
+	</select>
+	<!-- 将该学生所选的课程显示出来 -->
+	<select id="selectCourseUnselect" parameterType="int"
+		resultMap="courseAndTeacherResultMap">
+		select c.course_id,c.name,c.week,c.start_time,c.end_time,
+		t.teacher_id,t.name "t_name",t.sex,t.age from course c left join
+		teacher t on
+		(c.teacher_id=t.teacher_id)
+		where course_id not in (select
+		course_id from
+		course_student where student_id = #{studentId})
+	</select>
+	<select id="selectAllCourse" resultMap="courseResultMap">
+		select * from course
+	</select>
+	<select id="selectCourse" parameterType="int" resultMap="courseResultMap">
+		select *
+		from course
+		where course_id = #{courseId}
+	</select>
+	<select id="selectCourses" parameterType="Course" resultMap="courseResultMap">
+		<bind name="selectName" value="'%'+_parameter.getName()+'%'" />
+		select * from course
+		<where>
+			<if test="courseId!=null">
+				course_id = #{courseId}
+			</if>
+			<if test="name!=null">
+				AND name Like #{selectName}
+			</if>
+			<if test="week!=null">
+				AND week = #{week}
+			</if>
+			<if test="startTime!=null">
+				AND start_time &gt;= #{startTime}
+			</if>
+			<if test="endTime!=null">
+				AND end_time &lt;= #{endTime}
+			</if>
+			<if test="teacherId!=null">
+				AND teacher_id =#{teacherId}
+			</if>
+		</where>
+	</select>
+	<insert id="addCourse" parameterType="Student">
+		insert into course
+		(course_id,name,week,start_time,end_time,teacher_id)
+		values
+		(#{courseId},#{name},#{week},#{startTime},#{endTime},#{teacherId})
+	</insert>
+	<update id="updateCourse" parameterType="Course">
+		update course set
+		name=#{name},week=#{week},start_time=#{startTime},end_time=#{endTime},teacher_id=#{teacherId}
+		where course_id=#{courseId}
+	</update>
+	<delete id="removeCourse" parameterType="int">
+		delete from course where
+		course_id=#{courseId}
+	</delete>
+
+
+</mapper>
+
+	

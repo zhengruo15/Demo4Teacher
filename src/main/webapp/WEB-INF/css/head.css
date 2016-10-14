@@ -1,0 +1,33 @@
+.nav ul {
+	width: 700px;
+	margin: 0px auto;
+	height: 38px;
+	padding: 0;
+	list-style: none;
+}
+
+.nav ul li {
+	float: left;
+}
+
+.nav ul li a {
+	width: 80px;
+	height: 28px;
+	line-height: 28px;
+	background: red;
+	color: #FFF;
+	margin: 5px 10px;
+	font-size: 12px;
+	display: block;
+	text-align: center;
+	text-decoration: none;
+}
+
+.nav ul li a:hover {
+	width: 78px;
+	height: 26px;
+	line-height: 28px;
+	border: 1px solid red;
+	color: red;
+	background: #FFF;
+}

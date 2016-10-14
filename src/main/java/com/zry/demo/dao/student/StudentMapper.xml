@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zry.demo.dao.student.StudentMapper">
+	<resultMap type="Student" id="studentResultMap">
+		<id property="studentId" column="student_id" />
+		<result property="name" column="name" />
+		<result property="sex" column="sex" />
+		<result property="age" column="age" />
+	</resultMap>
+	<select id="selectAllStudent" resultMap="studentResultMap">
+		select * from student
+	</select>
+	<select id="selectStudent" parameterType="int" resultMap="studentResultMap">
+		select * from student t where t.student_id=#{studentId}
+	</select>
+	<select id="selectStudents" parameterType="Student" resultMap="studentResultMap">
+		<bind name="selectName" value="'%'+_parameter.getName()+'%'" />
+		select * from student
+		<where>
+			<if test="studentId != null">
+				student_Id = #{studentId}
+			</if>
+			<if test="name != null and name !=''">
+				AND name LIKE #{selectName}
+			</if>
+			<if test="sex != null and sex != ''">
+				AND sex = #{sex}
+			</if>
+			<if test="age != null">
+				AND age = #{age}
+			</if>
+		</where>
+	</select>
+	<delete id="deleteStudent" parameterType="int">
+		delete from student
+		where student_id=#{studentId}
+	</delete>
+	<insert id="addStudent" parameterType="Student">
+		insert into student
+		(student_id,name,sex,age)
+		values (#{studentId},#{name},#{sex},#{age})
+	</insert>
+	<update id="updateStudent" parameterType="Student">
+		update student set
+		name=#{name},sex=#{sex},age=#{age}
+		where student_id = #{studentId}
+	</update>
+
+	<!-- 将该学生所选的课程添加进去出来 -->
+	<insert id="addCourse" parameterType="hashmap">
+		insert into
+		course_student
+		(student_id,course_id)
+		values
+		(#{studentId},#{courseId})
+	</insert>
+	
+	<delete id="removeCourse" parameterType="hashmap">
+		delete from course_student
+		where student_id=#{studentId} AND course_id=#{courseId}
+	</delete>
+</mapper> 
