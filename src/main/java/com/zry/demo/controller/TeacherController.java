@@ -21,6 +21,7 @@ public class TeacherController {
 	@Autowired
 	private TeacherService teacherService;
 	private String errorMessage;
+	private String test;
 
 	public TeacherController(TeacherService teacherService) {
 		this.teacherService = teacherService;
