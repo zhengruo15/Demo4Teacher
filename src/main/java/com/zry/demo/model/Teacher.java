@@ -18,6 +18,17 @@ public class Teacher {
 	@Max(value=150,message="年纪最大值为150")
 	@Min(value=0,message="年纪最小值为0")
 	private Integer age;
+	
+	public Teacher(){
+	}
+	
+	public Teacher(int teacherId, String name, String sex, int age) {
+		super();
+		this.teacherId = teacherId;
+		this.name = name;
+		this.sex = sex;
+		this.age = age;
+	}
 
 	public Integer getTeacherId() {
 
